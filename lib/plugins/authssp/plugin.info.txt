@@ -1,0 +1,6 @@
+base authssp
+author Lukas Slansky
+email lukas@slansti.cz
+date 2014-01-21
+name SimpleSAMLphp Authentication Plugin
+desc Provides external authentication via SimpleSAMLphp
