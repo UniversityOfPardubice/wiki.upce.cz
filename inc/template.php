@@ -655,6 +655,21 @@ function tpl_get_action($type) {
             $accesskey = 'b';
             break;
         case 'login':
+        //LSL SimpleSAML
+    	    if(isset($_SERVER['REMOTE_USER'])){
+                if (!actionOK('logout')) {
+                    return false;
+                }
+                $params['do'] = 'logout';
+                $type = 'logout';
+    	    } else {
+    		$as = new SimpleSAML_Auth_Simple('default-sp');
+    		$link_as = $as->getLoginURL();
+    		global $lang;
+    		echo '<form class="button btn_login" method="post" action="' . $link_as . '"><div class="no"><input type="submit" value="'.$lang['btn_login'].'" class="button" title="'.$lang['btn_login'].'" /></div></form>';
+		return false;
+	    }
+	    break;
             $params['sectok'] = getSecurityToken();
             if(isset($_SERVER['REMOTE_USER'])) {
                 if(!actionOK('logout')) {

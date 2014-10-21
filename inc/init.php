@@ -142,12 +142,14 @@ if ($conf['gzip_output'] &&
 // init session
 if (!headers_sent() && !defined('NOSESSION')){
     session_name("DokuWiki");
+/*LSL - SimpleSAML
     $cookieDir = empty($conf['cookiedir']) ? DOKU_REL : $conf['cookiedir'];
     if (version_compare(PHP_VERSION, '5.2.0', '>')) {
         session_set_cookie_params(0,$cookieDir,'',($conf['securecookie'] && is_ssl()),true);
     }else{
         session_set_cookie_params(0,$cookieDir,'',($conf['securecookie'] && is_ssl()));
     }
+*/
     session_start();
 
     // load left over messages

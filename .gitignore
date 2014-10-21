@@ -44,3 +44,5 @@
 !/lib/plugins/admin.php
 !/lib/plugins/index.html
 !/lib/plugins/syntax.php
+/lib/exe/data/users.ssp.php
+/lib/plugins/acl/data/users.ssp.php
