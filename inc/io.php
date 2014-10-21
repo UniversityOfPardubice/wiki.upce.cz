@@ -367,8 +367,6 @@ function io_createNamespace($id, $ns_type='pages') {
  * @author  Andreas Gohr <andi@splitbrain.org>
  */
 function io_makeFileDir($file){
-    global $conf;
-
     $dir = dirname($file);
     if(!@is_dir($dir)){
         io_mkdir_p($dir) || msg("Creating directory $dir failed",-1);
@@ -393,11 +391,61 @@ function io_mkdir_p($target){
             return io_mkdir_ftp($dir);
         }else{
             $ret = @mkdir($target,$conf['dmode']); // crawl back up & create dir tree
-            if($ret && $conf['dperm']) chmod($target, $conf['dperm']);
+            if($ret && !empty($conf['dperm'])) chmod($target, $conf['dperm']);
             return $ret;
         }
     }
     return 0;
+}
+
+/**
+ * Recursively delete a directory
+ *
+ * @author Andreas Gohr <andi@splitbrain.org>
+ * @param string $path
+ * @param bool   $removefiles defaults to false which will delete empty directories only
+ * @return bool
+ */
+function io_rmdir($path, $removefiles = false) {
+    if(!is_string($path) || $path == "") return false;
+    if(!file_exists($path)) return true; // it's already gone or was never there, count as success
+
+    if(is_dir($path) && !is_link($path)) {
+        $dirs  = array();
+        $files = array();
+
+        if(!$dh = @opendir($path)) return false;
+        while(false !== ($f = readdir($dh))) {
+            if($f == '..' || $f == '.') continue;
+
+            // collect dirs and files first
+            if(is_dir("$path/$f") && !is_link("$path/$f")) {
+                $dirs[] = "$path/$f";
+            } else if($removefiles) {
+                $files[] = "$path/$f";
+            } else {
+                return false; // abort when non empty
+            }
+
+        }
+        closedir($dh);
+
+        // now traverse into  directories first
+        foreach($dirs as $dir) {
+            if(!io_rmdir($dir, $removefiles)) return false; // abort on any error
+        }
+
+        // now delete files
+        foreach($files as $file) {
+            if(!@unlink($file)) return false; //abort on any error
+        }
+
+        // remove self
+        return @rmdir($path);
+    } else if($removefiles) {
+        return @unlink($path);
+    }
+    return false;
 }
 
 /**
@@ -474,6 +522,7 @@ function io_download($url,$file,$useAttachment=false,$defaultName='',$maxSize=20
     $http = new DokuHTTPClient();
     $http->max_bodysize = $maxSize;
     $http->timeout = 25; //max. 25 sec
+    $http->keep_alive = false; // we do single ops here, no need for keep-alive
 
     $data = $http->get($url);
     if(!$data) return false;
@@ -526,25 +575,6 @@ function io_rename($from,$to){
         return false;
     }
     return true;
-}
-
-
-/**
- * Runs an external command and returns its output as string
- *
- * @author Harry Brueckner <harry_b@eml.cc>
- * @author Andreas Gohr <andi@splitbrain.org>
- * @deprecated
- */
-function io_runcmd($cmd){
-    $fh = popen($cmd, "r");
-    if(!$fh) return false;
-    $ret = '';
-    while (!feof($fh)) {
-        $ret .= fread($fh, 8192);
-    }
-    pclose($fh);
-    return $ret;
 }
 
 /**

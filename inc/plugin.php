@@ -22,6 +22,7 @@ class DokuWiki_Plugin {
      *
      * Needs to return a associative array with the following values:
      *
+     * base   - the plugin's base name (eg. the directory it needs to be installed in)
      * author - Author of the plugin
      * email  - Email address to contact the author
      * date   - Last modified date of the plugin in YYYY-MM-DD format
@@ -29,33 +30,34 @@ class DokuWiki_Plugin {
      * desc   - Short description of the plugin (Text only)
      * url    - Website with more information on the plugin (eg. syntax description)
      */
-    function getInfo(){
-        $parts = explode('_',get_class($this));
-        $info  = DOKU_PLUGIN.'/'.$parts[2].'/plugin.info.txt';
+    public function getInfo(){
+        $parts = explode('_', get_class($this));
+        $info = DOKU_PLUGIN . '/' . $parts[2] . '/plugin.info.txt';
         if(@file_exists($info)) return confToHash($info);
 
-        msg('getInfo() not implemented in '.get_class($this).
-               ' and '.$info.' not found.<br />This is a bug in the '.
-               $parts[2].' plugin and should be reported to the '.
-               'plugin author.',-1);
+        msg(
+            'getInfo() not implemented in ' . get_class($this) . ' and ' . $info . ' not found.<br />' .
+            'Verify you\'re running the latest version of the plugin. If the problem persists, send a ' .
+            'bug report to the author of the ' . $parts[2] . ' plugin.', -1
+        );
         return array(
-            'date'   => '0000-00-00',
-            'name'   => $parts[2].' plugin',
+            'date' => '0000-00-00',
+            'name' => $parts[2] . ' plugin',
         );
     }
 
     // plugin introspection methods
     // extract from class name, format = <plugin type>_plugin_<name>[_<component name>]
-    function getPluginType() {
+    public function getPluginType() {
         list($t) = explode('_', get_class($this), 2);
         return $t;
     }
-    function getPluginName() {
-        list($t, $p, $n) = explode('_', get_class($this), 4);
+    public function getPluginName() {
+        list(/* $t */, /* $p */, $n) = explode('_', get_class($this), 4);
         return $n;
     }
-    function getPluginComponent() {
-        list($t, $p, $n, $c) = explode('_', get_class($this), 4);
+    public function getPluginComponent() {
+        list(/* $t */, /* $p */, /* $n */, $c) = explode('_', get_class($this), 4);
         return (isset($c)?$c:'');
     }
 
@@ -69,7 +71,7 @@ class DokuWiki_Plugin {
      * @param   string  $id     id of the string to be retrieved
      * @return  string  string in appropriate language or english if not available
      */
-    function getLang($id) {
+    public function getLang($id) {
         if (!$this->localised) $this->setupLocale();
 
         return (isset($this->lang[$id]) ? $this->lang[$id] : '');
@@ -81,10 +83,10 @@ class DokuWiki_Plugin {
      * retrieve a language dependent file and pass to xhtml renderer for display
      * plugin equivalent of p_locale_xhtml()
      *
-     * @param   $id     id of language dependent wiki page
-     * @return  string  parsed contents of the wiki page in xhtml format
+     * @param   string $id id of language dependent wiki page
+     * @return  string     parsed contents of the wiki page in xhtml format
      */
-    function locale_xhtml($id) {
+    public function locale_xhtml($id) {
         return p_cached_output($this->localFN($id));
     }
 
@@ -93,10 +95,10 @@ class DokuWiki_Plugin {
      * prepends appropriate path for a language dependent filename
      * plugin equivalent of localFN()
      */
-    function localFN($id) {
+    public function localFN($id) {
         global $conf;
         $plugin = $this->getPluginName();
-        $file = DOKU_CONF.'/plugin_lang/'.$plugin.'/'.$conf['lang'].'/'.$id.'.txt';
+        $file = DOKU_CONF.'plugin_lang/'.$plugin.'/'.$conf['lang'].'/'.$id.'.txt';
         if (!@file_exists($file)){
             $file = DOKU_PLUGIN.$plugin.'/lang/'.$conf['lang'].'/'.$id.'.txt';
             if(!@file_exists($file)){
@@ -113,16 +115,29 @@ class DokuWiki_Plugin {
      *  this function is automatically called by getLang()
      */
     function setupLocale() {
-        if ($this->localised) return;
+        if($this->localised) return;
 
-        global $conf;            // definitely don't invoke "global $lang"
-        $path = DOKU_PLUGIN.$this->getPluginName().'/lang/';
+        global $conf, $config_cascade; // definitely don't invoke "global $lang"
+        $path = DOKU_PLUGIN . $this->getPluginName() . '/lang/';
 
         $lang = array();
 
         // don't include once, in case several plugin components require the same language file
-        @include($path.'en/lang.php');
-        if ($conf['lang'] != 'en') @include($path.$conf['lang'].'/lang.php');
+        @include($path . 'en/lang.php');
+        foreach($config_cascade['lang']['plugin'] as $config_file) {
+            if(@file_exists($config_file . $this->getPluginName() . '/en/lang.php')) {
+                include($config_file . $this->getPluginName() . '/en/lang.php');
+            }
+        }
+
+        if($conf['lang'] != 'en') {
+            @include($path . $conf['lang'] . '/lang.php');
+            foreach($config_cascade['lang']['plugin'] as $config_file) {
+                if(@file_exists($config_file . $this->getPluginName() . '/' . $conf['lang'] . '/lang.php')) {
+                    include($config_file . $this->getPluginName() . '/' . $conf['lang'] . '/lang.php');
+                }
+            }
+        }
 
         $this->lang = $lang;
         $this->localised = true;
@@ -133,12 +148,20 @@ class DokuWiki_Plugin {
      * getConf($setting)
      *
      * use this function to access plugin configuration variables
+     *
+     * @param string $setting the setting to access
+     * @param mixed  $notset  what to return if the setting is not available
+     * @return mixed
      */
-    function getConf($setting){
+    public function getConf($setting, $notset=false){
 
         if (!$this->configloaded){ $this->loadConfig(); }
 
-        return $this->conf[$setting];
+        if(isset($this->conf[$setting])){
+            return $this->conf[$setting];
+        }else{
+            return $notset;
+        }
     }
 
     /**
@@ -167,7 +190,7 @@ class DokuWiki_Plugin {
      *
      * @return    array    setting => value
      */
-    function readDefaultSettings() {
+    protected function readDefaultSettings() {
 
         $path = DOKU_PLUGIN.$this->getPluginName().'/conf/';
         $conf = array();
@@ -184,17 +207,13 @@ class DokuWiki_Plugin {
      *
      * @author  Esther Brunner <wikidesign@gmail.com>
      *
-     * @param   $name   name of plugin to load
-     * @param   $msg    message to display in case the plugin is not available
+     * @param   string $name   name of plugin to load
+     * @param   bool   $msg    if a message should be displayed in case the plugin is not available
      *
      * @return  object  helper plugin object
      */
-    function loadHelper($name, $msg){
-        if (!plugin_isdisabled($name)){
-            $obj =& plugin_load('helper',$name);
-        }else{
-            $obj = null;
-        }
+    public function loadHelper($name, $msg = true){
+        $obj = plugin_load('helper',$name);
         if (is_null($obj) && $msg) msg("Helper plugin $name is not available or invalid.",-1);
         return $obj;
     }
@@ -206,7 +225,7 @@ class DokuWiki_Plugin {
      * email
      * standardised function to generate an email link according to obfuscation settings
      */
-    function email($email, $name='', $class='', $more='') {
+    public function email($email, $name='', $class='', $more='') {
         if (!$email) return $name;
         $email = obfuscate($email);
         if (!$name) $name = $email;
@@ -218,7 +237,7 @@ class DokuWiki_Plugin {
      * external_link
      * standardised function to generate an external link according to conf settings
      */
-    function external_link($link, $title='', $class='', $target='', $more='') {
+    public function external_link($link, $title='', $class='', $target='', $more='') {
         global $conf;
 
         $link = htmlentities($link);
@@ -234,10 +253,36 @@ class DokuWiki_Plugin {
     }
 
     /**
+     * A fallback to provide access to the old render() method
+     *
+     * Since syntax plugins provide their own render method with a different signature and they now
+     * inherit from Doku_Plugin we can no longer have a render() method here (Strict Standards Violation).
+     * Instead use render_text()
+     *
+     * @deprecated 2014-01-22
+     * @param $name
+     * @param $arguments
+     * @return null|string
+     */
+    public function __call($name, $arguments) {
+        if($name == 'render'){
+            dbg_deprecated('render_text()');
+            if(!isset($arguments[1])) $arguments[1] = 'xhtml';
+            return $this->render_text($arguments[0], $arguments[1]);
+        }
+        trigger_error("no such method $name", E_USER_ERROR);
+        return null;
+    }
+
+    /**
      * output text string through the parser, allows dokuwiki markup to be used
      * very ineffecient for small pieces of data - try not to use
+     *
+     * @param string $text wiki markup to parse
+     * @param string $format output format
+     * @return null|string
      */
-    function render($text, $format='xhtml') {
+    public function render_text($text, $format='xhtml') {
         return p_render($format, p_get_instructions($text),$info);
     }
 
@@ -246,14 +291,7 @@ class DokuWiki_Plugin {
      *
      * @return bool   false if the plugin has to be instantiated
      */
-    function isSingleton() {
+    public function isSingleton() {
         return true;
     }
-
-    // deprecated functions
-    function plugin_localFN($id) { return $this->localFN($id); }
-    function plugin_locale_xhtml($id) { return $this->locale_xhtml($id); }
-    function plugin_email($e, $n='', $c='', $m='') { return $this->email($e, $n, $c, $m); }
-    function plugin_link($l, $t='', $c='', $to='', $m='') { return $this->external_link($l, $t, $c, $to, $m); }
-    function plugin_render($t, $f='xhtml') { return $this->render($t, $f); }
 }

@@ -20,6 +20,7 @@ function act_dispatch(){
     global $ID;
     global $INFO;
     global $QUERY;
+    /* @var Input $INPUT */
     global $INPUT;
     global $lang;
     global $conf;
@@ -53,7 +54,7 @@ function act_dispatch(){
             }
         }
 
-        //display some infos
+        //display some info
         if($ACT == 'check'){
             check();
             $ACT = 'show';
@@ -67,6 +68,22 @@ function act_dispatch(){
             act_sitemap($ACT);
         }
 
+        //recent changes
+        if ($ACT == 'recent'){
+            $show_changes = $INPUT->str('show_changes');
+            if (!empty($show_changes)) {
+                set_doku_pref('show_changes', $show_changes);
+            }
+        }
+
+        //diff
+        if ($ACT == 'diff'){
+            $difftype = $INPUT->str('difftype');
+            if (!empty($difftype)) {
+                set_doku_pref('difftype', $difftype);
+            }
+        }
+
         //register
         if($ACT == 'register' && $INPUT->post->bool('save') && register()){
             $ACT = 'login';
@@ -76,14 +93,26 @@ function act_dispatch(){
             $ACT = 'login';
         }
 
-        //update user profile
-        if ($ACT == 'profile') {
-            if(!$_SERVER['REMOTE_USER']) {
+        // user profile changes
+        if (in_array($ACT, array('profile','profile_delete'))) {
+            if(!$INPUT->server->str('REMOTE_USER')) {
                 $ACT = 'login';
             } else {
-                if(updateprofile()) {
-                    msg($lang['profchanged'],1);
-                    $ACT = 'show';
+                switch ($ACT) {
+                    case 'profile' :
+                        if(updateprofile()) {
+                            msg($lang['profchanged'],1);
+                            $ACT = 'show';
+                        }
+                        break;
+                    case 'profile_delete' :
+                        if(auth_deleteprofile()){
+                            msg($lang['profdeleted'],1);
+                            $ACT = 'show';
+                        } else {
+                            $ACT = 'profile';
+                        }
+                        break;
                 }
             }
         }
@@ -136,7 +165,8 @@ function act_dispatch(){
                 $pluginlist = plugin_list('admin');
                 if (in_array($page, $pluginlist)) {
                     // attempt to load the plugin
-                    if ($plugin =& plugin_load('admin',$page) !== null){
+
+                    if (($plugin = plugin_load('admin',$page)) !== null){
                         /** @var DokuWiki_Admin_Plugin $plugin */
                         if($plugin->forAdminOnly() && !$INFO['isadmin']){
                             // a manager tried to load a plugin that's for admins only
@@ -156,12 +186,12 @@ function act_dispatch(){
     $evt->advise_after();
     // Make sure plugs can handle 'denied'
     if($conf['send404'] && $ACT == 'denied') {
-        header('HTTP/1.0 403 Forbidden');
+        http_status(403);
     }
     unset($evt);
 
     // when action 'show', the intial not 'show' and POST, do a redirect
-    if($ACT == 'show' && $preact != 'show' && strtolower($_SERVER['REQUEST_METHOD']) == 'post'){
+    if($ACT == 'show' && $preact != 'show' && strtolower($INPUT->server->str('REQUEST_METHOD')) == 'post'){
         act_redirect($ID,$preact);
     }
 
@@ -231,7 +261,7 @@ function act_validate($act) {
     //disable all acl related commands if ACL is disabled
     if(!$conf['useacl'] && in_array($act,array('login','logout','register','admin',
                     'subscribe','unsubscribe','profile','revert',
-                    'resendpwd'))){
+                    'resendpwd','profile_delete'))){
         msg('Command unavailable: '.htmlspecialchars($act),-1);
         return 'show';
     }
@@ -242,7 +272,7 @@ function act_validate($act) {
     if(!in_array($act,array('login','logout','register','save','cancel','edit','draft',
                     'preview','search','show','check','index','revisions',
                     'diff','recent','backlink','admin','subscribe','revert',
-                    'unsubscribe','profile','resendpwd','recover',
+                    'unsubscribe','profile','profile_delete','resendpwd','recover',
                     'draftdel','sitemap','media')) && substr($act,0,7) != 'export_' ) {
         msg('Command unknown: '.htmlspecialchars($act),-1);
         return 'show';
@@ -271,7 +301,7 @@ function act_permcheck($act){
         }else{
             $permneed = AUTH_CREATE;
         }
-    }elseif(in_array($act,array('login','search','recent','profile','index', 'sitemap'))){
+    }elseif(in_array($act,array('login','search','recent','profile','profile_delete','index', 'sitemap'))){
         $permneed = AUTH_NONE;
     }elseif($act == 'revert'){
         $permneed = AUTH_ADMIN;
@@ -385,6 +415,8 @@ function act_revert($act){
     global $ID;
     global $REV;
     global $lang;
+    /* @var Input $INPUT */
+    global $INPUT;
     // FIXME $INFO['writable'] currently refers to the attic version
     // global $INFO;
     // if (!$INFO['writable']) {
@@ -416,7 +448,7 @@ function act_revert($act){
     session_write_close();
 
     // when done, show current page
-    $_SERVER['REQUEST_METHOD'] = 'post'; //should force a redirect
+    $INPUT->server->set('REQUEST_METHOD','post'); //should force a redirect
     $REV = '';
     return 'show';
 }
@@ -464,17 +496,20 @@ function act_redirect_execute($opts){
 function act_auth($act){
     global $ID;
     global $INFO;
+    /* @var Input $INPUT */
+    global $INPUT;
 
     //already logged in?
-    if(isset($_SERVER['REMOTE_USER']) && $act=='login'){
+    if($INPUT->server->has('REMOTE_USER') && $act=='login'){
         return 'show';
     }
 
     //handle logout
     if($act=='logout'){
         $lockedby = checklock($ID); //page still locked?
-        if($lockedby == $_SERVER['REMOTE_USER'])
+        if($lockedby == $INPUT->server->str('REMOTE_USER')){
             unlock($ID); //try to unlock
+        }
 
         // do the logout stuff
         auth_logoff();
@@ -642,7 +677,7 @@ function act_sitemap($act) {
     global $conf;
 
     if ($conf['sitemap'] < 1 || !is_numeric($conf['sitemap'])) {
-        header("HTTP/1.0 404 Not Found");
+        http_status(404);
         print "Sitemap generation is disabled.";
         exit;
     }
@@ -668,13 +703,13 @@ function act_sitemap($act) {
 
         // Send file
         //use x-sendfile header to pass the delivery to compatible webservers
-        if (http_sendfile($sitemap)) exit;
+        http_sendfile($sitemap);
 
         readfile($sitemap);
         exit;
     }
 
-    header("HTTP/1.0 500 Internal Server Error");
+    http_status(500);
     print "Could not read the sitemap file - bad permissions?";
     exit;
 }
@@ -690,10 +725,11 @@ function act_subscription($act){
     global $lang;
     global $INFO;
     global $ID;
+    /* @var Input $INPUT */
     global $INPUT;
 
     // subcriptions work for logged in users only
-    if(!$_SERVER['REMOTE_USER']) return 'show';
+    if(!$INPUT->server->str('REMOTE_USER')) return 'show';
 
     // get and preprocess data.
     $params = array();
@@ -704,28 +740,35 @@ function act_subscription($act){
     }
 
     // any action given? if not just return and show the subscription page
-    if(!$params['action'] || !checkSecurityToken()) return $act;
+    if(empty($params['action']) || !checkSecurityToken()) return $act;
 
     // Handle POST data, may throw exception.
     trigger_event('ACTION_HANDLE_SUBSCRIBE', $params, 'subscription_handle_post');
 
     $target = $params['target'];
     $style  = $params['style'];
-    $data   = $params['data'];
     $action = $params['action'];
 
     // Perform action.
-    if (!subscription_set($_SERVER['REMOTE_USER'], $target, $style, $data)) {
+    $sub = new Subscription();
+    if($action == 'unsubscribe'){
+        $ok = $sub->remove($target, $INPUT->server->str('REMOTE_USER'), $style);
+    }else{
+        $ok = $sub->add($target, $INPUT->server->str('REMOTE_USER'), $style);
+    }
+
+    if($ok) {
+        msg(sprintf($lang["subscr_{$action}_success"], hsc($INFO['userinfo']['name']),
+                    prettyprint_id($target)), 1);
+        act_redirect($ID, $act);
+    } else {
         throw new Exception(sprintf($lang["subscr_{$action}_error"],
                                     hsc($INFO['userinfo']['name']),
                                     prettyprint_id($target)));
     }
-    msg(sprintf($lang["subscr_{$action}_success"], hsc($INFO['userinfo']['name']),
-                prettyprint_id($target)), 1);
-    act_redirect($ID, $act);
 
     // Assure that we have valid data if act_redirect somehow fails.
-    $INFO['subscribed'] = get_info_subscribed();
+    $INFO['subscribed'] = $sub->user_subscription();
     return 'show';
 }
 
@@ -740,6 +783,8 @@ function act_subscription($act){
 function subscription_handle_post(&$params) {
     global $INFO;
     global $lang;
+    /* @var Input $INPUT */
+    global $INPUT;
 
     // Get and validate parameters.
     if (!isset($params['target'])) {
@@ -770,15 +815,14 @@ function subscription_handle_post(&$params) {
         }
         if ($is === false) {
             throw new Exception(sprintf($lang['subscr_not_subscribed'],
-                                        $_SERVER['REMOTE_USER'],
+                                        $INPUT->server->str('REMOTE_USER'),
                                         prettyprint_id($target)));
         }
         // subscription_set deletes a subscription if style = null.
         $style = null;
     }
 
-    $data = in_array($style, array('list', 'digest')) ? time() : null;
-    $params = compact('target', 'style', 'data', 'action');
+    $params = compact('target', 'style', 'action');
 }
 
 //Setup VIM: ex: et ts=2 :

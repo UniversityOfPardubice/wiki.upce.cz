@@ -1,112 +1,123 @@
-====== Syntax formÃ¡tovÃ¡nÃ­ ======
+====== Syntax formátování ======
 
-UPaWiki pouÅ¾Ã­vÃ¡ systÃ©m [[doku>cs:DokuWiki]]. Ten podporuje jednoduchÃ½ znaÄkovÃ½ jazyk, kterÃ½ zaruÄuje, Å¾e ÄlÃ¡nky budou co nejvÃ­ce ÄitelnÃ©. Tato strÃ¡nka ukazuje vÅ¡echny pouÅ¾Ã­vanÃ© formÃ¡ty syntaxe, kterÃ© mÅ¯Å¾ete pouÅ¾Ã­t pÅ™i psanÃ­ strÃ¡nek. Na zdroj strÃ¡nky se mÅ¯Å¾ete jednoduÅ¡e podÃ­vat stiskem tlaÄÃ­tka //Editovat strÃ¡nku// v hornÃ­ ÄÃ¡sti strÃ¡nky. Chcete-li si nÄ›co vyzkouÅ¡et, mÅ¯Å¾ete pouÅ¾Ã­t [[playground:playground|pÃ­skoviÅ¡tÄ›]]. ZÃ¡kladnÃ­ formÃ¡tovÃ¡nÃ­ je dostupnÃ© takÃ© pomocÃ­ [[doku>cs:toolbar|liÅ¡ty]] editaÄnÃ­ho okna.
+UPaWiki pouívá systém [[doku>cs:DokuWiki]]. Ten podporuje jednoduchı znaèkovı jazyk, kterı zaruèuje, e èlánky budou co nejvíce èitelné. Tato stránka ukazuje všechny pouívané formáty syntaxe, které mùete pouít pøi psaní stránek. Na zdroj stránky se mùete jednoduše podívat stiskem tlaèítka //Editovat stránku// v horní èásti stránky. Chcete-li si nìco vyzkoušet, mùete pouít [[playground:playground|pískovištì]]. Základní formátování je dostupné také pomocí [[doku>cs:toolbar|lišty]] editaèního okna.
 
-===== ZÃ¡kladnÃ­ formÃ¡tovÃ¡nÃ­ textu =====
+===== Základní formátování textu =====
 
-UPaWiki podporuje texty psanÃ© **tuÄnÄ›**, //kurzÃ­vou//, __podtrÅ¾enÄ›__ and ''jako psacÃ­m strojem''. VÅ¡e mÅ¯Å¾ete samozÅ™ejmÄ› **__//''kombinovat''//__**.
+UPaWiki podporuje texty psané **tuènì**, //kurzívou//, __podtrenì__ and ''jako psacím strojem''. Vše mùete samozøejmì **__//''kombinovat''//__**.
 
-  UPaWiki podporuje texty psanÃ© **tuÄnÄ›**, //kurzÃ­vou//, __podtrÅ¾enÄ›__ and ''jako psacÃ­m strojem''.
-  VÅ¡e mÅ¯Å¾ete samozÅ™ejmÄ› **__//''kombinovat''//__**.
+  UPaWiki podporuje texty psané **tuènì**, //kurzívou//, __podtrenì__ and ''jako psacím strojem''.
+  Vše mùete samozøejmì **__//''kombinovat''//__**.
 
-MÅ¯Å¾ete pouÅ¾Ã­t takÃ© <sub>hornÃ­ index</sub> a <sup>dolnÃ­ index</sup>.
+Mùete pouít také <sub>horní index</sub> a <sup>dolní index</sup>.
 
-  MÅ¯Å¾ete pouÅ¾Ã­t takÃ© <sub>hornÃ­ index</sub> a <sup>dolnÃ­ index</sup>.
+  Mùete pouít také <sub>horní index</sub> a <sup>dolní index</sup>.
 
-ÄŒÃ¡st textu mÅ¯Å¾ete oznaÄit jako <del>smazanou</del>.
+Èást textu mùete oznaèit jako <del>smazanou</del>.
 
-  ÄŒÃ¡st textu mÅ¯Å¾ete oznaÄit jako <del>smazanou</del>.
+  Èást textu mùete oznaèit jako <del>smazanou</del>.
 
-**Odstavec** vytvoÅ™Ã­te prÃ¡zdnÃ½m Å™Ã¡dkem. Pokud chcete **vynutit Å™Ã¡dkovÃ½ zlom** bez vzniku odstavce, mÅ¯Å¾ete pouÅ¾Ã­t zpÄ›tnÃ¡ lomÃ­tka s nÃ¡sledujÃ­cÃ­ mezerou nebo koncem Å™Ã¡dku.
+**Odstavec** vytvoøíte prázdnım øádkem. Pokud chcete **vynutit øádkovı zlom** bez vzniku odstavce, mùete pouít zpìtná lomítka s následující mezerou nebo koncem øádku.
 
-Toto je text s nÄ›kolika zlomy\\ VÅ¡imnÄ›te si, Å¾e dvÄ›
-zpÄ›tnÃ¡ lomÃ­tka jsou rozeznÃ¡na pouze na konci Å™Ã¡dku\\
+Toto je text s nìkolika zlomy\\ Všimnìte si, e dvì
+zpìtná lomítka jsou rozeznána pouze na konci øádku\\
 nebo s mezerou\\ za nimi \\, toto se stane bez mezery.
 
-  Toto je text s nÄ›kolika zlomy\\ VÅ¡imnÄ›te si, Å¾e dvÄ›
-  zpÄ›tnÃ¡ lomÃ­tka jsou rozeznÃ¡na pouze na konci Å™Ã¡dku\\
+  Toto je text s nìkolika zlomy\\ Všimnìte si, e dvì
+  zpìtná lomítka jsou rozeznána pouze na konci øádku\\
   nebo s mezerou\\ za nimi \\, toto se stane bez mezery.
 
-VynucenÃ© Å™Ã¡dkovÃ© zlomy byste mÄ›li pouÅ¾Ã­vat jen, jsou-li nezbytnÄ› nutnÃ©.
+Vynucené øádkové zlomy byste mìli pouívat jen, jsou-li nezbytnì nutné.
 
 ===== Odkazy =====
 
-UPaWiki podporuje nÄ›kolik zpÅ¯sobÅ¯ vzniku odkazÅ¯.
+UPaWiki podporuje nìkolik zpùsobù vzniku odkazù.
 
-==== ExternÃ­ ====
+==== Externí ====
 
-ExternÃ­ odkazy jsou rozpoznÃ¡vÃ¡ny automaticky: http://www.upce.cz nebo jednoduÅ¡e www.upce.cz. MÅ¯Å¾ete nastavit takÃ© odkaz z textu: [[http://www.upce.cz|Tento odkaz vede na UPa]]. E-mailovÃ© adresy jsou takÃ© rozeznÃ¡vÃ¡ny: <wiki@upce.cz>.
+Externí odkazy jsou rozpoznávány automaticky: http://www.upce.cz nebo jednoduše www.upce.cz. Mùete nastavit také odkaz z textu: [[http://www.upce.cz|Tento odkaz vede na UPa]]. E-mailové adresy jsou také rozeznávány: <wiki@upce.cz>.
 
-  ExternÃ­ odkazy jsou rozpoznÃ¡vÃ¡ny automaticky: http://www.upce.cz
-  nebo jednoduÅ¡e www.upce.cz. MÅ¯Å¾ete nastavit takÃ© odkaz z textu:
-  [[http://www.upce.cz|Tento odkaz vede na UPa]]. E-mailovÃ© adresy
-  jsou takÃ© rozeznÃ¡vÃ¡ny: <wiki@upce.cz>.
-==== InternÃ­ ====
+  Externí odkazy jsou rozpoznávány automaticky: http://www.upce.cz
+  nebo jednoduše www.upce.cz. Mùete nastavit také odkaz z textu:
+  [[http://www.upce.cz|Tento odkaz vede na UPa]]. E-mailové adresy
+  jsou také rozeznávány: <wiki@upce.cz>.
+==== Interní ====
 
-InternÃ­ odkazy jsou vytvÃ¡Å™eny pomocÃ­ hranatÃ½ch zÃ¡vorek. MÅ¯Å¾ete pouÅ¾Ã­t prostÄ› jen [[jmÃ©no strÃ¡nky]] nebo pouÅ¾Ã­t [[jmÃ©no strÃ¡nky|text odkazu]].
+Interní odkazy jsou vytváøeny pomocí hranatıch závorek. Mùete pouít prostì jen [[jméno stránky]] nebo pouít [[jméno stránky|text odkazu]].
 
-  InternÃ­ odkazy jsou vytvÃ¡Å™eny pomocÃ­ hranatÃ½ch zÃ¡vorek. MÅ¯Å¾ete pouÅ¾Ã­t prostÄ›
-  jen [[jmÃ©no strÃ¡nky]] nebo pouÅ¾Ã­t [[jmÃ©no strÃ¡nky|text odkazu]].
+  Interní odkazy jsou vytváøeny pomocí hranatıch závorek. Mùete pouít prostì
+  jen [[jméno stránky]] nebo pouít [[jméno stránky|text odkazu]].
 
-[[doku>pagename|JmÃ©na strÃ¡nek]] jsou automaticky zmÄ›nÄ›na na malÃ¡ pÃ­smena, znaky s diakritikou a dalÅ¡Ã­ speciÃ¡lnÃ­ znaky nejsou doporuÄenÃ©, jsou ale zmÄ›nÄ›ny na Äitelnou podobu.
+[[doku>pagename|Jména stránek]] jsou automaticky zmìnìna na malá písmena, znaky s diakritikou a další speciální znaky nejsou doporuèené, jsou ale zmìnìny na èitelnou podobu.
 
-DvojteÄkou ve jmÃ©nu strÃ¡nky udÄ›lÃ¡te odkaz na jinÃ½ [[jiny:prostor|prostor]].
+Dvojteèkou ve jménu stránky udìláte odkaz na jinı [[jiny:prostor|prostor]].
 
-  DvojteÄkou ve jmÃ©nu strÃ¡nky udÄ›lÃ¡te odkaz na jinÃ½ [[jiny:prostor|prostor]].
+  Dvojteèkou ve jménu stránky udìláte odkaz na jinı [[jiny:prostor|prostor]].
 
-Odkaz na urÄitou sekci je takÃ© moÅ¾nÃ½. Za jmÃ©no strÃ¡nky jednoduÅ¡e pÅ™idÃ¡te # a za nÄ›j jmÃ©no sekce. Toto je odkaz na [[syntax#interni|tuto sekci]].
+Odkaz na urèitou sekci je také monı. Za jméno stránky jednoduše pøidáte # a za nìj jméno sekce. Toto je odkaz na [[syntax#interni|tuto sekci]].
 
   Toto je odkaz na [[syntax#interni|tuto sekci]].
 
-PoznÃ¡mky:
+Poznámky:
 
-  * Odkazy na [[syntax|existujÃ­cÃ­ strÃ¡nky]] se zobrazuji jinak, neÅ¾ na strÃ¡nky [[nonexisting|neexistujÃ­cÃ­]].
-  * KdyÅ¾ se zmÄ›nÃ­ nadpis sekce, zmÄ›nÃ­ se takÃ© odkaz na ni. NespolÃ©hejte se proto pÅ™Ã­liÅ¡ na odkazy na sekce.
+  * Odkazy na [[syntax|existující stránky]] se zobrazuji jinak, ne na stránky [[nonexisting|neexistující]].
+  * Kdy se zmìní nadpis sekce, zmìní se také odkaz na ni. Nespoléhejte se proto pøíliš na odkazy na sekce.
 
 ==== Interwiki ====
 
-UPaWiki podporuje [[doku>Interwiki]] odkazy. Ty mohou rychlo odkÃ¡zat na jinÃ© wiki strÃ¡nky. Toto je napÅ™Ã­klad odkaz na strÃ¡nku o Wiki na Wikipedii: [[wp>Wiki]].
+UPaWiki podporuje [[doku>Interwiki]] odkazy. Ty mohou rychlo odkázat na jiné wiki stránky. Toto je napøíklad odkaz na stránku o Wiki na Wikipedii: [[wp>Wiki]].
 
-  UPaWiki podporuje [[doku>Interwiki]] odkazy. Ty mohou rychlo odkÃ¡zat na jinÃ© wiki
-  strÃ¡nky. Toto je napÅ™Ã­klad odkaz na strÃ¡nku o Wiki na Wikipedii: [[wp>Wiki]].
+  UPaWiki podporuje [[doku>Interwiki]] odkazy. Ty mohou rychlo odkázat na jiné wiki
+  stránky. Toto je napøíklad odkaz na stránku o Wiki na Wikipedii: [[wp>Wiki]].
 
 
-==== ObrÃ¡zkovÃ© odkazy ====
+==== Obrázkové odkazy ====
 
-Pro odkaz na jinou internÃ­ Äi externÃ­ strÃ¡nku mÅ¯Å¾ete pouÅ¾Ã­t i obrÃ¡zek. Toto udÄ›lÃ¡te zkombinovÃ¡nÃ­m odkazÅ¯ a [[#obrazky_a_jine_soubory|obrÃ¡zkÅ¯]] (viz nÃ­Å¾e) jako napÅ™.:
+Pro odkaz na jinou interní èi externí stránku mùete pouít i obrázek. Toto udìláte zkombinováním odkazù a [[#obrazky_a_jine_soubory|obrázkù]] (viz níe) jako napø.:
+
+Notes:
+
+  * For security reasons direct browsing of windows shares only works in Microsoft Internet Explorer per default (and only in the "local zone").
+  * For Mozilla and Firefox it can be enabled through different workaround mentioned in the [[http://kb.mozillazine.org/Links_to_local_pages_do_not_work|Mozilla Knowledge Base]]. However, there will still be a JavaScript warning about trying to open a Windows Share. To remove this warning (for all users), put the following line in ''conf/userscript.js'':
+
+  LANG.nosmblinks = '';
+
+==== Image Links ====
+
+You can also use an image to link to another internal or external page by combining the syntax for links and [[#images_and_other_files|images]] (see below) like this:
 
   [[http://www.php.net|{{wiki:dokuwiki-128.png}}]]
 
 [[http://www.php.net|{{wiki:dokuwiki-128.png}}]]
 
-PoznÃ¡mka: ObrÃ¡zky jsou jedinÃ© moÅ¾nÃ© zmÄ›ny formÃ¡tu e jmÃ©nu odkazu.
+Poznámka: Obrázky jsou jediné moné zmìny formátu e jménu odkazu.
 
-Je podporovÃ¡na kompletnÃ­ syntaxe [[#obrazky_a_jine_soubory|obrÃ¡zkÅ¯]] a [[#odkazy|odkazÅ¯]] (vÄetnÄ› zmÄ›n velikosti, intrenÃ­ch a externÃ­ch obrÃ¡zkÅ¯, odkazÅ¯ mimo UPaWiki Äi interwiki).
-===== PoznÃ¡mky pod Äarou =====
+Je podporována kompletní syntaxe [[#obrazky_a_jine_soubory|obrázkù]] a [[#odkazy|odkazù]] (vèetnì zmìn velikosti, intreních a externích obrázkù, odkazù mimo UPaWiki èi interwiki).
+===== Poznámky pod èarou =====
 
-MÅ¯Å¾ete pÅ™idÃ¡vat poznÃ¡mky pod Äarou ((Toto je poznÃ¡mka pod Äerou)) pomocÃ­ dvojitÃ½ch zÃ¡vorek.
+Mùete pøidávat poznámky pod èarou ((Toto je poznámka pod èerou)) pomocí dvojitıch závorek.
 
-  MÅ¯Å¾ete pÅ™idÃ¡vat poznÃ¡mky pod Äarou ((Toto je poznÃ¡mka pod Äerou)) pomocÃ­ dvojitÃ½ch zÃ¡vorek.
+  Mùete pøidávat poznámky pod èarou ((Toto je poznámka pod èerou)) pomocí dvojitıch závorek.
 
 ===== Sekce =====
 
-MÅ¯Å¾ete pouÅ¾Ã­t aÅ¾ pÄ›t ÃºrovnÃ­ nadpisÅ¯ pro strukturovÃ¡nÃ­ obsahu. Obsahuje-li text vÃ­ce neÅ¾ tÅ™i nadpisy, je automaticky vygenerovÃ¡n obsah. GenerovÃ¡nÃ­ obsahu lze zakÃ¡zat vloÅ¾enÃ­m textu ''<nowiki>~~NOTOC~~</nowiki>'' do dokumentu.
+Mùete pouít a pìt úrovní nadpisù pro strukturování obsahu. Obsahuje-li text více ne tøi nadpisy, je automaticky vygenerován obsah. Generování obsahu lze zakázat vloením textu ''<nowiki>~~NOTOC~~</nowiki>'' do dokumentu.
 
-==== Nadpis ÃºrovnÄ› 3 ====
-=== Nadpis ÃºrovnÄ› 4 ===
-== Nadpis ÃºrovnÄ› 5 ==
+==== Nadpis úrovnì 3 ====
+=== Nadpis úrovnì 4 ===
+== Nadpis úrovnì 5 ==
 
-  ==== Nadpis ÃºrovnÄ› 3 ====
-  === Nadpis ÃºrovnÄ› 4 ===
-  == Nadpis ÃºrovnÄ› 5 ==
+  ==== Nadpis úrovnì 3 ====
+  === Nadpis úrovnì 4 ===
+  == Nadpis úrovnì 5 ==
 
-PouÅ¾itÃ­m ÄtyÅ™ a vÃ­ce pomlÄek lze vytvoÅ™it horizontÃ¡lnÃ­ oddÄ›lovacÃ­ ÄÃ¡ru:
+Pouitím ètyø a více pomlèek lze vytvoøit horizontální oddìlovací èáru:
 
 ----
 
-===== ObrÃ¡zky a jinÃ© soubory =====
+===== Obrázky a jiné soubory =====
 
-You can include external and internal [[doku>images]] with curly brackets. Optionally you can specify the size of them.
+You can include external and internal [[doku>images|images, videos and audio files]] with curly brackets. Optionally you can specify the size of them.
 
 Real size:                        {{wiki:dokuwiki-128.png}}
 
@@ -140,9 +151,30 @@ Of course, you can add a title (displayed as a tooltip by most browsers), too.
 
   {{ wiki:dokuwiki-128.png |This is the caption}}
 
-If you specify a filename (external or internal) that is not an image (''gif, jpeg, png''), then it will be displayed as a link instead.
-
 For linking an image to another page see [[#Image Links]] above.
+
+==== Supported Media Formats ====
+
+DokuWiki can embed the following media formats directly.
+
+| Image | ''gif'', ''jpg'', ''png''  |
+| Video | ''webm'', ''ogv'', ''mp4'' |
+| Audio | ''ogg'', ''mp3'', ''wav''  |
+| Flash | ''swf''                    |
+
+If you specify a filename that is not a supported media format, then it will be displayed as a link instead.
+
+==== Fallback Formats ====
+
+Unfortunately not all browsers understand all video and audio formats. To mitigate the problem, you can upload your file in different formats for maximum browser compatibility.
+
+For example consider this embedded mp4 video:
+
+  {{video.mp4|A funny video}}
+
+When you upload a ''video.webm'' and ''video.ogv'' next to the referenced ''video.mp4'', DokuWiki will automatically add them as alternatives so that one of the three files is understood by your browser.
+
+Additionally DokuWiki supports a "poster" image which will be shown before the video has started. That image needs to have the same filename as the video and be either a jpg or png file. In the example above a ''video.jpg'' file would work.
 
 ===== Lists =====
 
@@ -384,6 +416,54 @@ When you use the ''%%<code>%%'' or ''%%<file>%%'' syntax as above, you might wan
 If you don't want any highlighting but want a downloadable file, specify a dash (''-'') as the language code: ''%%<code - myfile.foo>%%''.
 
 
+
+You can embed raw HTML or PHP code into your documents by using the ''%%<html>%%'' or ''%%<php>%%'' tags. (Use uppercase tags if you need to enclose block level elements.)
+
+HTML example:
+
+<code>
+<html>
+This is some <span style="color:red;font-size:150%;">inline HTML</span>
+</html>
+<HTML>
+<p style="border:2px dashed red;">And this is some block HTML</p>
+</HTML>
+</code>
+
+<html>
+This is some <span style="color:red;font-size:150%;">inline HTML</span>
+</html>
+<HTML>
+<p style="border:2px dashed red;">And this is some block HTML</p>
+</HTML>
+
+PHP example:
+
+<code>
+<php>
+echo 'The PHP version: ';
+echo phpversion();
+echo ' (generated inline HTML)';
+</php>
+<PHP>
+echo '<table class="inline"><tr><td>The same, but inside a block level element:</td>';
+echo '<td>'.phpversion().'</td>';
+echo '</tr></table>';
+</PHP>
+</code>
+
+<php>
+echo 'The PHP version: ';
+echo phpversion();
+echo ' (inline HTML)';
+</php>
+<PHP>
+echo '<table class="inline"><tr><td>The same, but inside a block level element:</td>';
+echo '<td>'.phpversion().'</td>';
+echo '</tr></table>';
+</PHP>
+
+**Please Note**: HTML and PHP embedding is disabled by default in the configuration. If disabled, the code is displayed instead of executed.
 
 ===== RSS/ATOM Feed Aggregation =====
 [[DokuWiki]] can integrate data from external XML feeds. For parsing the XML feeds, [[http://simplepie.org/|SimplePie]] is used. All formats understood by SimplePie can be used in DokuWiki as well. You can influence the rendering by multiple additional space separated parameters:

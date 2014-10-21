@@ -50,7 +50,8 @@ class parserutils_set_metadata_during_rendering_test extends DokuWikiTest {
     function helper_set_metadata($event, $meta) {
         if ($this->active) {
             p_set_metadata($this->id, $meta, false, true);
-            $key = array_pop(array_keys($meta));
+            $keys = array_keys($meta);
+            $key = array_pop($keys);
             $this->assertTrue(is_string($meta[$key])); // ensure we really have a key
             // ensure that the metadata property hasn't been set previously
             $this->assertNotEquals($meta[$key], p_get_metadata($this->id, $key));
@@ -79,7 +80,7 @@ class parserutils_set_metadata_during_rendering_test extends DokuWikiTest {
     }
 
     // wrapper function for the fake plugin controller, return $this for the fake syntax of this test
-    function &load($type,$name,$new=false,$disabled=false){
+    function load($type,$name,$new=false,$disabled=false){
         if ($name == 'parserutils_test') {
             return $this;
         } else {

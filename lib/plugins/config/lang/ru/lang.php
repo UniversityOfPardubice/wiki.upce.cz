@@ -17,6 +17,7 @@
  * @author Ladyko Andrey <fylh@succexy.spb.ru>
  * @author Eugene <windy.wanderer@gmail.com>
  * @author Johnny Utah <pcpa@cyberpunk.su>
+ * @author Ivan I. Udovichenko (sendtome@mymailbox.pp.ua)
  */
 $lang['menu']                  = 'Настройки вики';
 $lang['error']                 = 'Настройки не были сохранены из-за ошибки в одном из значений. Пожалуйста, проверьте свои изменения и попробуйте ещё раз.<br />Неправильные значения будут обведены красной рамкой.';
@@ -39,10 +40,9 @@ $lang['_editing']              = 'Параметры правки';
 $lang['_links']                = 'Параметры ссылок';
 $lang['_media']                = 'Параметры медиафайлов';
 $lang['_notifications']        = 'Параметры уведомлений';
+$lang['_syndication']          = 'Настройки синдикаций';
 $lang['_advanced']             = 'Тонкая настройка';
 $lang['_network']              = 'Параметры сети';
-$lang['_plugin_sufix']         = 'Параметры плагина';
-$lang['_template_sufix']       = 'Параметры шаблона';
 $lang['_msg_setting_undefined'] = 'Не найдены метаданные настроек.';
 $lang['_msg_setting_no_class'] = 'Не найден класс настроек.';
 $lang['_msg_setting_no_default'] = 'Не задано значение по умолчанию.';
@@ -95,6 +95,7 @@ $lang['disableactions_other']  = 'Другие операции (через за
 $lang['auth_security_timeout'] = 'Интервал для безопасности авторизации (сек.)';
 $lang['securecookie']          = 'Должны ли куки (cookies), выставленные через HTTPS, отправляться браузером только через HTTPS. Отключите эту опцию в случае, когда только логин вашей вики передаётся через SSL, а обычный просмотр осуществляется в небезопасном режиме.';
 $lang['remote']                = 'Включить систему API для подключений. Это позволит другим приложениям получить доступ к вики через XML-RPC или другие механизмы.';
+$lang['remoteuser']            = 'Дать права для удаленного API доступа пользователям указанным тут (разделять запятыми). Оставьте это поле пустым что бы открыть доступ всем.';
 $lang['usewordblock']          = 'Блокировать спам по ключевым словам';
 $lang['relnofollow']           = 'rel="nofollow" для внешних ссылок';
 $lang['indexdelay']            = 'Задержка перед индексированием';
@@ -112,7 +113,6 @@ $lang['target____media']       = 'target для ссылок на медиафа
 $lang['target____windows']     = 'target для ссылок на сетевые каталоги';
 $lang['mediarevisions']        = 'Включение версий медиафайлов';
 $lang['refcheck']              = 'Проверять ссылки на медиафайлы';
-$lang['refshow']               = 'Показывать ссылок на медиафайлы';
 $lang['gdlib']                 = 'Версия LibGD';
 $lang['im_convert']            = 'Путь к ImageMagick';
 $lang['jpg_quality']           = 'Качество сжатия JPG (0–100). Значение по умолчанию — 70.';
@@ -129,6 +129,7 @@ $lang['rss_linkto']            = 'Ссылки в RSS';
 $lang['rss_content']           = 'Что отображать в строках XML-ленты?';
 $lang['rss_update']            = 'Интервал обновления XML-ленты (сек.)';
 $lang['rss_show_summary']      = 'Показывать краткую выдержку в заголовках XML-ленты';
+$lang['rss_media']             = 'Какие изменения должны быть отображены в XML?';
 $lang['updatecheck']           = 'Проверять наличие обновлений и предупреждений о безопасности? Для этого «ДокуВики» потребуется связываться с сайтом <a href="http://www.splitbrain.org/">splitbrain.org</a>.';
 $lang['userewrite']            = 'Удобочитаемые адреса (URL)';
 $lang['useslash']              = 'Использовать слэш';
@@ -146,6 +147,7 @@ $lang['xsendfile']             = 'Используете заголовок X-Se
 $lang['renderer_xhtml']        = 'Обработчик основного (xhtml) вывода вики';
 $lang['renderer__core']        = '%s (ядро dokuwiki)';
 $lang['renderer__plugin']      = '%s (плагин)';
+$lang['dnslookups']            = 'DokuWiki ищет DNS имена пользователей редактирующих страницы. Если у вас нет DNS сервера или он работает медленно, рекомендуем отключить эту опцию.';
 $lang['proxy____host']         = 'proxy-адрес';
 $lang['proxy____port']         = 'proxy-порт';
 $lang['proxy____user']         = 'proxy-имя пользователя';

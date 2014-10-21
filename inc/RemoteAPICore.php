@@ -3,7 +3,7 @@
 /**
  * Increased whenever the API is changed
  */
-define('DOKU_API_VERSION', 7);
+define('DOKU_API_VERSION', 9);
 
 class RemoteAPICore {
 
@@ -24,6 +24,10 @@ class RemoteAPICore {
                 'return' => 'int',
                 'doc' => 'Tries to login with the given credentials and sets auth cookies.',
                 'public' => '1'
+            ), 'dokuwiki.logoff' => array(
+                'args' => array(),
+                'return' => 'int',
+                'doc' => 'Tries to logoff by expiring auth cookies and the associated PHP session.'
             ), 'dokuwiki.getPagelist' => array(
                 'args' => array('string', 'array'),
                 'return' => 'array',
@@ -48,7 +52,7 @@ class RemoteAPICore {
                 'public' => '1'
             ), 'dokuwiki.appendPage' => array(
                 'args' => array('string', 'string', 'array'),
-                'return' => 'int',
+                'return' => 'bool',
                 'doc' => 'Append text to a wiki page.'
             ),  'wiki.getPage' => array(
                 'args' => array('string'),
@@ -88,12 +92,12 @@ class RemoteAPICore {
             ), 'wiki.getPageInfo' => array(
                 'args' => array('string'),
                 'return' => 'array',
-                'doc' => 'Returns a struct with infos about the page.',
+                'doc' => 'Returns a struct with info about the page.',
                 'name' => 'pageInfo'
             ), 'wiki.getPageInfoVersion' => array(
                 'args' => array('string', 'int'),
                 'return' => 'array',
-                'doc' => 'Returns a struct with infos about the page.',
+                'doc' => 'Returns a struct with info about the page.',
                 'name' => 'pageInfo'
             ), 'wiki.getPageVersions' => array(
                 'args' => array('string', 'int'),
@@ -102,7 +106,7 @@ class RemoteAPICore {
                 'name' => 'pageVersions'
             ), 'wiki.putPage' => array(
                 'args' => array('string', 'string', 'array'),
-                'return' => 'int',
+                'return' => 'bool',
                 'doc' => 'Saves a wiki page.'
             ), 'wiki.listLinks' => array(
                 'args' => array('string'),
@@ -136,7 +140,7 @@ class RemoteAPICore {
             ), 'wiki.getAttachmentInfo' => array(
                 'args' => array('string'),
                 'return' => 'array',
-                'doc' => 'Returns a struct with infos about the attachment.'
+                'doc' => 'Returns a struct with info about the attachment.'
             ), 'dokuwiki.getXMLRPCAPIVersion' => array(
                 'args' => array(),
                 'name' => 'getAPIVersion',
@@ -333,7 +337,6 @@ class RemoteAPICore {
         if (!is_array($options)) $options = array();
         $options['skipacl'] = 0; // no ACL skipping for XMLRPC
 
-
         if(auth_quickaclcheck($ns.':*') >= AUTH_READ) {
             $dir = utf8_encodeFN(str_replace(':', '/', $ns));
 
@@ -344,6 +347,8 @@ class RemoteAPICore {
 
             for($i=0; $i<$len; $i++) {
                 unset($data[$i]['meta']);
+                $data[$i]['perms'] = $data[$i]['perm'];
+                unset($data[$i]['perm']);
                 $data[$i]['lastModified'] = $this->api->toDate($data[$i]['mtime']);
             }
             return $data;
@@ -370,10 +375,11 @@ class RemoteAPICore {
         $file = wikiFN($id,$rev);
         $time = @filemtime($file);
         if(!$time){
-            throw new RemoteException(10, 'The requested page does not exist', 121);
+            throw new RemoteException('The requested page does not exist', 121);
         }
 
-        $info = getRevisionInfo($id, $time, 1024);
+        $pagelog = new PageChangeLog($id, 1024);
+        $info = $pagelog->getRevisionInfo($time);
 
         $data = array(
             'name'         => $id,
@@ -440,7 +446,7 @@ class RemoteAPICore {
         // run the indexer if page wasn't indexed yet
         idx_addPage($id);
 
-        return 0;
+        return true;
     }
 
     /**
@@ -504,8 +510,8 @@ class RemoteAPICore {
     }
 
     /**
-    * Returns the permissions of a given wiki page
-    */
+     * Returns the permissions of a given wiki page
+     */
     function aclCheck($id) {
         $id = $this->resolvePageId($id);
         return auth_quickaclcheck($id);
@@ -645,16 +651,19 @@ class RemoteAPICore {
             throw new RemoteException('Empty page ID', 131);
         }
 
-        $revisions = getRevisions($id, $first, $conf['recent']+1);
+        $pagelog = new PageChangeLog($id);
+        $revisions = $pagelog->getRevisions($first, $conf['recent']+1);
 
         if(count($revisions)==0 && $first!=0) {
             $first=0;
-            $revisions = getRevisions($id, $first, $conf['recent']+1);
+            $revisions = $pagelog->getRevisions($first, $conf['recent']+1);
         }
 
         if(count($revisions)>0 && $first==0) {
             array_unshift($revisions, '');  // include current revision
-            array_pop($revisions);          // remove extra log entry
+            if ( count($revisions) > $conf['recent'] ){
+                array_pop($revisions);          // remove extra log entry
+            }
         }
 
         if(count($revisions) > $conf['recent']) {
@@ -669,7 +678,8 @@ class RemoteAPICore {
                 // case this can lead to less pages being returned than
                 // specified via $conf['recent']
                 if($time){
-                    $info = getRevisionInfo($id, $time, 1024);
+                    $pagelog->setChunkSize(1024);
+                    $info = $pagelog->getRevisionInfo($time);
                     if(!empty($info)) {
                         $data['user'] = $info['user'];
                         $data['ip']   = $info['ip'];
@@ -764,11 +774,22 @@ class RemoteAPICore {
         return $ok;
     }
 
+    function logoff(){
+        global $conf;
+        global $auth;
+        if(!$conf['useacl']) return 0;
+        if(!$auth) return 0;
+        
+        auth_logoff();
+
+        return 1;
+    }
+
     private function resolvePageId($id) {
         $id = cleanID($id);
         if(empty($id)) {
             global $conf;
-            $id = cleanID($conf['start']);	
+            $id = cleanID($conf['start']);
         }
         return $id;
     }

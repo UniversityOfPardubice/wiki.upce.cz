@@ -3,12 +3,13 @@
 require_once DOKU_INC . 'inc/parser/parser.php';
 require_once DOKU_INC . 'inc/parser/handler.php';
 
-abstract class TestOfDoku_Parser extends PHPUnit_Framework_TestCase {
+abstract class TestOfDoku_Parser extends DokuWikiTest {
 
     var $P;
     var $H;
 
-    function setup() {
+    function setUp() {
+        parent::setUp();
         $this->P = new Doku_Parser();
         $this->H = new Doku_Handler();
         $this->P->Handler = & $this->H;
