@@ -40,6 +40,7 @@ function html_login(){
     global $INPUT;
 
     print p_locale_xhtml('login');
+/*
     print '<div class="centeralign">'.NL;
     $form = new Doku_Form(array('id' => 'dw__login'));
     $form->startFieldset($lang['btn_login']);
@@ -62,6 +63,8 @@ function html_login(){
     }
 
     html_form('login', $form);
+*/
+    tpl_action('login');
     print '</div>'.NL;
 }
 
